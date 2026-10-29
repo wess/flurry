@@ -86,6 +86,10 @@ function Overview() {
 						<strong>Harden an integration</strong>
 						<span>Keep credentials narrow, verify deliveries, and handle untrusted content.</span>
 					</a>
+					<a href="/docs/self-hosting">
+						<strong>Run your own instance</strong>
+						<span>Start with Docker, configure HTTPS, upgrade, and back up durable data.</span>
+					</a>
 				</div>
 			</section>
 			<section>
@@ -862,6 +866,79 @@ function ApiGuide() {
 	);
 }
 
+function SelfHostingGuide() {
+	return (
+		<>
+			<PageHeader title="Self-hosting with Docker">
+				Run a complete Flurry instance with PostgreSQL, automatic migrations, health checks,
+				and persistent repository storage.
+			</PageHeader>
+			<section>
+				<h2>Start locally</h2>
+				<CodeBlock label="Shell">
+					{lines(
+						"git clone https://github.com/wess/flurry.git",
+						"cd flurry",
+						"docker compose up -d",
+					)}
+				</CodeBlock>
+				<p>
+					Open <a href="http://localhost:4040">localhost:4040</a> and create the owner
+					account. Compose waits for PostgreSQL, applies migrations, starts Flurry, and checks
+					<code>/api/health</code>. Database records and repository objects survive container
+					replacement in named volumes.
+				</p>
+			</section>
+			<section>
+				<h2>Put the instance online</h2>
+				<CodeBlock label=".env">
+					{lines(
+						"FLURRY_DATABASE_PASSWORD=replace-with-a-long-url-safe-password",
+						"FLURRY_PUBLIC_URL=https://git.example.com",
+						"FLURRY_SECURE_COOKIES=true",
+					)}
+				</CodeBlock>
+				<p>
+					Terminate HTTPS at a reverse proxy, forward traffic to port <code>4040</code>, and
+					do not publish PostgreSQL. Add mail, source-provider, S3, SSH, proxy, and policy
+					variables from the configuration reference only when needed.
+				</p>
+				<Callout title="Keep the database password URL-safe">
+					Compose places the password inside <code>DATABASE_URL</code>. Percent-encode reserved
+					characters or supply a fully encoded URL through the deployment environment.
+				</Callout>
+			</section>
+			<section>
+				<h2>Upgrade safely</h2>
+				<CodeBlock label="Shell">
+					{lines(
+						"docker compose pull",
+						"docker compose up -d",
+						"docker compose ps",
+						"curl --fail https://git.example.com/api/health",
+					)}
+				</CodeBlock>
+				<p>
+					The container runs pending migrations before the application starts. Keep the
+					database and object volumes as one backup set, and verify file reads, history,
+					reviews, and Git clone/fetch after a recovery.
+				</p>
+			</section>
+			<Callout title="Full operator reference">
+				Read the repository’s{" "}
+				<a href="https://github.com/wess/flurry/blob/main/docs/docker.md">
+					Docker installation guide
+				</a>{" "}
+				and{" "}
+				<a href="https://github.com/wess/flurry/blob/main/docs/backups.md">
+					storage and recovery guide
+				</a>{" "}
+				before operating a public instance.
+			</Callout>
+		</>
+	);
+}
+
 function SecurityGuide() {
 	return (
 		<>
@@ -945,6 +1022,7 @@ function SecurityGuide() {
 const pages: Record<string, () => ReactNode> = {
 	overview: Overview,
 	"getting-started": GettingStarted,
+	"self-hosting": SelfHostingGuide,
 	repositories: Repositories,
 	git: GitGuide,
 	fsc: FscGuide,

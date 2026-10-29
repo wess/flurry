@@ -7,6 +7,7 @@ test("documentation covers browser, Git, fsc, API, automation, MCP, and security
 	await expect(page).toHaveTitle("Flurry documentation — Git, fsc, API, MCP, and automation");
 	await expect(page.getByRole("heading", { name: "Build with Flurry" })).toBeVisible();
 	await expect(page.getByRole("navigation", { name: "Documentation" })).toBeVisible();
+	await expect(page.getByRole("link", { name: "Self-hosting", exact: true })).toBeVisible();
 
 	await page.getByRole("link", { name: "HTTP API", exact: true }).click();
 	await expect(page).toHaveURL(/\/docs\/api$/);
@@ -46,6 +47,8 @@ test("OpenAPI and crawler references expose the documentation", async ({ request
 
 	const sitemap = await (await request.get("/sitemap.xml")).text();
 	expect(sitemap).toContain("https://flurry.codes/docs/api");
+	expect(sitemap).toContain("https://flurry.codes/docs/self-hosting");
 	const llms = await (await request.get("/llms.txt")).text();
 	expect(llms).toContain("[Documentation](https://flurry.codes/docs)");
+	expect(llms).toContain("[Source repository](https://github.com/wess/flurry)");
 });

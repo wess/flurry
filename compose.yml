@@ -1,0 +1,47 @@
+name: flurry
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: flurry
+      POSTGRES_USER: flurry
+      POSTGRES_PASSWORD: ${FLURRY_DATABASE_PASSWORD:-flurry}
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flurry -d flurry"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  flurry:
+    image: ghcr.io/wess/flurry:latest
+    build:
+      context: .
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://flurry:${FLURRY_DATABASE_PASSWORD:-flurry}@postgres:5432/flurry
+      FLURRY_HOST: 0.0.0.0
+      FLURRY_PUBLIC_URL: ${FLURRY_PUBLIC_URL:-http://localhost:4040}
+      FLURRY_SECURE_COOKIES: ${FLURRY_SECURE_COOKIES:-false}
+      FLURRY_STORE: /var/lib/flurry/objects
+      PORT: 4040
+    ports:
+      - "${FLURRY_PORT:-4040}:4040"
+    volumes:
+      - objects:/var/lib/flurry
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:4040/api/health"]
+      interval: 15s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+
+volumes:
+  database:
+  objects:

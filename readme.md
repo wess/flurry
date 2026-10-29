@@ -219,6 +219,47 @@ Connected-account tokens are encrypted with `FLURRY_SECRET_KEY`, bound to their
 owner and provider, and decrypted only for an active repository transfer. They
 are never returned by the API or included in logs and error records.
 
+## Run with Docker
+
+The quickest self-hosted installation needs only Docker with the Compose plugin:
+
+```sh
+docker compose up -d
+```
+
+Open <http://localhost:4040> and create the owner account. Compose starts Flurry
+and PostgreSQL, applies database migrations before every start, and keeps database
+and repository objects in named volumes. Future upgrades are:
+
+```sh
+docker compose pull
+docker compose up -d
+```
+
+To build the image from this checkout instead of pulling the published image:
+
+```sh
+docker compose up --build -d
+```
+
+For a public instance, create an ignored `.env` file beside `compose.yml`:
+
+```dotenv
+FLURRY_DATABASE_PASSWORD=replace-with-a-long-url-safe-password
+FLURRY_PUBLIC_URL=https://git.example.com
+FLURRY_SECURE_COOKIES=true
+```
+
+Terminate TLS at a reverse proxy and forward traffic to port `4040`. The database
+is not published to the host. The `database` and `objects` volumes are one recovery
+set; back up both together as described in [docs/backups.md](docs/backups.md).
+Additional mail, source-provider, S3, SSH, and policy settings from
+[.env.example](.env.example) can be added to the `flurry.environment` section of
+`compose.yml`.
+
+The complete install, upgrade, reverse-proxy, health-check, and recovery procedure
+is in [docs/docker.md](docs/docker.md).
+
 ## Run locally
 
 You need Elixir 1.18+, Erlang/OTP 27+, PostgreSQL 14+, Bun 1.4.4+, Rust 1.89+

@@ -6,6 +6,11 @@ export const docsTopics = [
 		"Create an account, start a repository, and publish the first change.",
 	],
 	[
+		"self-hosting",
+		"Self-hosting",
+		"Install with Docker, configure a public origin, upgrade, and protect persistent data.",
+	],
+	[
 		"repositories",
 		"Repositories",
 		"Create, import, organize, transfer, archive, and restore projects.",

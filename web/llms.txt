@@ -12,8 +12,14 @@ Automation can attach bounded provenance to a submitted revision and publish imm
 
 - [Flurry](https://flurry.codes/): Product overview, engine architecture, repository workflow, and account creation.
 - [Documentation](https://flurry.codes/docs): Browser, Git, fsc, review, automation, MCP, API, and security guides.
+- [Self-hosting](https://flurry.codes/docs/self-hosting): Docker installation, public deployment, upgrades, and recovery.
 - [HTTP API](https://flurry.codes/docs/api): Authentication, request behavior, examples, and complete endpoint catalog.
 - [OpenAPI 3.1](https://flurry.codes/openapi.json): Machine-readable HTTP API description.
+
+## Open source
+
+- [Source repository](https://github.com/wess/flurry): Apache-2.0 server, web application, native client, Docker image source, and operator documentation.
+- [Docker installation](https://github.com/wess/flurry/blob/main/docs/docker.md): Compose configuration and production checklist.
 
 ## Policies
 

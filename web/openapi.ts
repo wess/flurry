@@ -164,7 +164,7 @@ export const openapi = {
 	openapi: "3.1.0",
 	info: {
 		title: "Flurry HTTP API",
-		version: "0.1.2",
+		version: "0.1.3",
 		description:
 			"Repository, review, collaboration, and automation API for Flurry. Use expiring, narrowly scoped tokens for integrations. Browser-only operations are marked with cookieSession security.",
 		contact: { email: "me@wess.io" },

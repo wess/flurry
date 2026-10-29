@@ -69,3 +69,15 @@ then verify representative file reads, history, reviews, and Git clones before
 accepting traffic. A separate bucket replication or snapshot policy can add a
 second physical copy; it must be additive and must never propagate application-
 unaware deletes into the primary prefix.
+
+## Docker Compose installations
+
+The default Compose setup stores PostgreSQL in the `database` volume and local
+content-addressed objects in the `objects` volume. Treat them as one recovery set.
+Stopping application writes before a coordinated snapshot gives the clearest
+recovery point; otherwise use a PostgreSQL-consistent dump and retain the complete
+object volume from the same backup window.
+
+Do not back up only the database or only the object volume. After restoring both,
+start Flurry so pending migrations run, check `/api/health`, then verify file reads,
+history, reviews, and Git clone/fetch before reopening the instance.

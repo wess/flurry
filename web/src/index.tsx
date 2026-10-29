@@ -268,7 +268,7 @@ function App() {
 				<a href={isSnippetHost() ? mainOrigin() + "/docs" : "/docs"}>Docs</a>
 				<a href={isSnippetHost() ? mainOrigin() + "/terms" : "/terms"}>Terms</a>
 				<a href={isSnippetHost() ? mainOrigin() + "/privacy" : "/privacy"}>Privacy</a>
-				<span>0.1.2</span>
+				<span>0.1.3</span>
 			</footer>
 		</>
 	);
