@@ -4,7 +4,7 @@ defmodule Flurry.MixProject do
   def project do
     [
       app: :flurry,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -18,7 +18,7 @@ defmodule Flurry.MixProject do
 
   defp deps do
     [
-      {:bandit, "~> 1.6"},
+      {:bandit, "~> 1.14.1"},
       {:plug, "~> 1.16"},
       {:ecto_sql, "~> 3.12"},
       {:postgrex, "~> 0.19"},
