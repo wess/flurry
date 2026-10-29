@@ -1,0 +1,55 @@
+.composedialog {
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	padding: 25px;
+	width: min(760px, calc(100% - 30px));
+	max-height: 90vh;
+	overflow: auto;
+	color: var(--ink);
+	background: #fff;
+}
+.composedialog::backdrop {
+	background: #26334566;
+}
+.dialogheading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
+.dialogheading h2 {
+	font-size: 21px;
+	margin: 0;
+}
+.composedialog > p {
+	font-size: 12px;
+}
+.editor {
+	border-top: 1px solid var(--line);
+	padding-top: 17px;
+}
+.form .check {
+	flex-direction: row;
+	align-items: center;
+	gap: 7px;
+	font-weight: 400;
+	margin: 10px 0;
+}
+.check input {
+	accent-color: var(--blue);
+}
+.codeinput {
+	font-size: 12px;
+	line-height: 1.65;
+	tab-size: 2;
+}
+.dialogfooter {
+	display: flex;
+	justify-content: flex-end;
+	gap: 9px;
+	border-top: 1px solid var(--line);
+	padding-top: 18px;
+}
+.addfile {
+	align-self: flex-start;
+}

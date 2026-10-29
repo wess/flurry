@@ -1,0 +1,217 @@
+@media (max-width: 700px) {
+	.repositoryidentity,
+	.choicegroup,
+	.initializeselects {
+		grid-template-columns: 1fr;
+	}
+	.repositoryslash {
+		display: none;
+	}
+	.emptysetupintro {
+		flex-direction: column;
+	}
+	.headerinner {
+		padding: 0 16px;
+		gap: 12px;
+	}
+	.header nav {
+		gap: 14px;
+	}
+	.headeractions {
+		gap: 10px;
+	}
+	.headeractions .profilelink span:not(.avatar) {
+		display: none;
+	}
+	.shell {
+		padding: 25px 16px 45px;
+	}
+	.profile {
+		grid-template-columns: 1fr;
+		gap: 30px;
+	}
+	.profileaside .avatar.large {
+		float: left;
+		width: 74px;
+		height: 74px;
+		margin: 0 20px 12px 0;
+		font-size: 25px;
+		border-radius: 12px;
+	}
+	.profileaside .full {
+		clear: both;
+	}
+	.profileaside .bio {
+		clear: both;
+		padding-top: 7px;
+	}
+	.profilemeta {
+		gap: 6px;
+		margin-top: 15px;
+	}
+	.profileaside h1 {
+		padding-top: 4px;
+	}
+	.profileaside .handle {
+		margin-bottom: 25px;
+	}
+	.pagetitle {
+		align-items: flex-start;
+		gap: 14px;
+	}
+	.pagetitle h1 {
+		font-size: 22px;
+	}
+	.pagetitle p {
+		font-size: 12px;
+	}
+	.pagetitle .button {
+		font-size: 12px;
+	}
+	.tabs {
+		gap: 17px;
+	}
+	.tabs > a {
+		font-size: 12px;
+		gap: 5px;
+	}
+	.tabs .small {
+		font-size: 11px;
+		padding: 4px 7px;
+	}
+	.tabs > button svg {
+		display: none;
+	}
+	.repoheading {
+		font-size: 17px;
+	}
+	.reviewactions {
+		align-items: flex-start;
+	}
+	.reviewheading h1 {
+		font-size: 20px;
+	}
+	.historyrow {
+		align-items: flex-start;
+	}
+	.activityrow,
+	.provenancerow {
+		align-items: flex-start;
+	}
+	.activitymeta {
+		white-space: normal;
+		text-align: right;
+	}
+	.evaluationrow {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		align-items: start;
+	}
+	.evaluationfacts {
+		grid-column: 2 / -1;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		gap: 3px 12px;
+		white-space: normal;
+		text-align: left;
+	}
+	.evaluationrow > a {
+		grid-column: 3;
+		grid-row: 1;
+	}
+	.reviewintelheading {
+		align-items: stretch;
+		flex-direction: column;
+	}
+	.reviewintelheading > button {
+		align-self: flex-start;
+	}
+	.reviewintelbar {
+		flex-wrap: wrap;
+	}
+	.reviewintelbar .grow {
+		display: none;
+	}
+	.findingfooter .grow {
+		flex-basis: 100%;
+	}
+	.filefindings a {
+		grid-template-columns: auto auto minmax(0, 1fr);
+	}
+	.filefindings a > svg:last-child {
+		display: none;
+	}
+	.historyrow > code {
+		font-size: 10px;
+	}
+	.reponame {
+		font-size: 14px;
+	}
+	.reporow .row {
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+	.filetoolbar {
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+	.repositorysearch {
+		order: 4;
+		width: 100%;
+	}
+	.repositorysearch input {
+		width: 100%;
+	}
+	.reviewrow {
+		padding: 14px 10px;
+		gap: 9px;
+	}
+	footer {
+		margin: 0 16px;
+		font-size: 11px;
+		gap: 12px;
+	}
+	.headeractions > .button {
+		font-size: 11px;
+		padding: 5px 8px;
+	}
+	.header nav a {
+		font-size: 12px;
+	}
+	.brand {
+		font-size: 19px;
+		gap: 5px;
+	}
+	.brand svg {
+		width: 22px;
+	}
+	.form.panel {
+		padding: 20px;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	* {
+		scroll-behavior: auto !important;
+		animation: none !important;
+		transition: none !important;
+	}
+}
+
+.headeractions > a {
+	white-space: nowrap;
+}
+@media (max-width: 480px) {
+	.header {
+		height: auto;
+	}
+	.headerinner {
+		flex-wrap: wrap;
+		padding: 10px 16px;
+		row-gap: 10px;
+	}
+	.header nav {
+		order: 3;
+		width: 100%;
+	}
+}

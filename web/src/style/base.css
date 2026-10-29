@@ -1,0 +1,397 @@
+:root {
+	font-family:
+		system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	color: #263345;
+	background: #fff;
+	font-synthesis: none;
+	font-size: 14px;
+	line-height: 1.5;
+	--ink: #263345;
+	--muted: #657387;
+	--line: #e2e7ed;
+	--soft: #f6f8fa;
+	--blue: #2563a6;
+}
+* {
+	box-sizing: border-box;
+}
+body {
+	margin: 0;
+}
+a {
+	color: var(--blue);
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+h1,
+h2,
+h3,
+p {
+	margin-top: 0;
+}
+h1 {
+	font-size: 25px;
+	letter-spacing: -0.6px;
+	font-weight: 600;
+	margin-bottom: 6px;
+	line-height: 1.3;
+}
+h2 {
+	font-size: 17px;
+	font-weight: 600;
+	margin-bottom: 12px;
+}
+h3 {
+	font-size: 16px;
+	font-weight: 600;
+}
+p {
+	margin-bottom: 16px;
+}
+small {
+	font-size: 12px;
+}
+code,
+.codeinput {
+	font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+	font-size: 12px;
+}
+button,
+.button {
+	font: inherit;
+	font-size: 13px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 7px;
+	background: #fff;
+	color: var(--ink);
+	border: 1px solid #ccd4de;
+	border-radius: 5px;
+	min-height: 34px;
+	padding: 6px 12px;
+	cursor: pointer;
+	white-space: nowrap;
+	text-decoration: none;
+	line-height: 1.4;
+}
+button:hover,
+.button:hover {
+	background: #f0f3f7;
+	text-decoration: none;
+}
+button:disabled {
+	opacity: 0.55;
+	cursor: wait;
+}
+.primary {
+	background: var(--blue);
+	color: #fff;
+	border-color: var(--blue);
+}
+.primary:hover {
+	background: #1f548f;
+	color: white;
+}
+.small {
+	font-size: 12px;
+	min-height: 29px;
+	padding: 4px 9px;
+}
+.iconbutton {
+	border: 0;
+	background: transparent;
+	padding: 5px;
+	min-height: 30px;
+	color: var(--muted);
+}
+input,
+textarea,
+select {
+	font: inherit;
+	color: var(--ink);
+	border: 1px solid #cbd3df;
+	border-radius: 5px;
+	padding: 8px 10px;
+	background: #fff;
+	min-width: 0;
+}
+input:focus,
+textarea:focus,
+select:focus {
+	outline: 2px solid #b9d6f4;
+	outline-offset: 1px;
+}
+button:focus-visible,
+a:focus-visible {
+	outline: 2px solid var(--blue);
+	outline-offset: 3px;
+}
+textarea {
+	resize: vertical;
+}
+input:disabled {
+	background: var(--soft);
+	color: var(--muted);
+}
+.muted {
+	color: var(--muted);
+}
+.grow {
+	flex: 1;
+	min-width: 0;
+}
+.row {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+.center {
+	text-align: center;
+}
+.full {
+	width: 100%;
+}
+.notificationlist {
+	padding: 0;
+}
+.notification {
+	display: flex;
+	gap: 18px;
+	align-items: center;
+	padding: 16px 18px;
+	border-bottom: 1px solid var(--line);
+}
+.notification:last-child {
+	border-bottom: 0;
+}
+.notification.read {
+	background: var(--soft);
+}
+.notification h2,
+.notification p {
+	margin-bottom: 4px;
+}
+.header {
+	height: 62px;
+	border-bottom: 1px solid var(--line);
+	background: var(--soft);
+}
+.headerinner {
+	max-width: 1160px;
+	margin: auto;
+	padding: 0 26px;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	gap: 35px;
+}
+.brand {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 21px;
+	letter-spacing: -0.6px;
+	font-weight: 650;
+	color: var(--ink);
+}
+.brand svg {
+	color: var(--blue);
+}
+.brandname {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 7px;
+}
+.brandname small {
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0;
+	color: var(--muted);
+}
+.brand:hover {
+	text-decoration: none;
+}
+.header nav {
+	display: flex;
+	gap: 25px;
+}
+.header nav a {
+	color: #46556a;
+	font-size: 13px;
+}
+.headeractions {
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 17px;
+	font-size: 13px;
+}
+.profilelink {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--ink);
+}
+.avatar {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: #e0ebf5;
+	color: #345b7f;
+	width: 29px;
+	height: 29px;
+	border-radius: 50%;
+	font-size: 11px;
+	font-weight: 600;
+	flex-shrink: 0;
+}
+.avatar.large {
+	width: 112px;
+	height: 112px;
+	font-size: 35px;
+	border-radius: 18px;
+	margin-bottom: 22px;
+	background: #e7eef5;
+}
+.shell {
+	max-width: 1108px;
+	padding: 34px 24px 65px;
+	min-height: calc(100vh - 122px);
+	margin: auto;
+}
+footer {
+	max-width: 1060px;
+	margin: auto;
+	display: flex;
+	gap: 20px;
+	align-items: center;
+	border-top: 1px solid var(--line);
+	color: var(--muted);
+	padding: 18px 0;
+	font-size: 12px;
+}
+footer span:last-child {
+	margin-left: auto;
+}
+.pagetitle {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	margin-bottom: 26px;
+}
+.pagetitle p {
+	margin: 0;
+}
+.search {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--muted);
+	border: 1px solid var(--line);
+	border-radius: 5px;
+	padding-left: 12px;
+	margin-bottom: 20px;
+}
+.search input {
+	width: 100%;
+	border: 0;
+	background: transparent;
+	outline-offset: 0;
+}
+.panel {
+	border: 1px solid var(--line);
+	border-radius: 6px;
+	overflow: hidden;
+}
+.repolist {
+	border-top: 1px solid var(--line);
+}
+.reporow {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 22px 2px;
+	border-bottom: 1px solid var(--line);
+}
+.reporow > svg {
+	margin-top: 3px;
+}
+.reponame {
+	font-size: 16px;
+}
+.reporow p {
+	margin: 7px 0;
+	color: var(--muted);
+	font-size: 13px;
+}
+.badge {
+	display: inline-flex;
+	gap: 4px;
+	align-items: center;
+	padding: 1px 7px;
+	border: 1px solid var(--line);
+	border-radius: 20px;
+	font-size: 11px;
+	color: var(--muted);
+	font-weight: 400;
+}
+.empty {
+	padding: 48px 20px;
+	text-align: center;
+	border: 1px dashed var(--line);
+	border-radius: 6px;
+	color: var(--muted);
+}
+.empty h3 {
+	color: var(--ink);
+	margin-bottom: 6px;
+}
+.empty p {
+	max-width: 440px;
+	margin: 0 auto;
+}
+.alert {
+	background: #fff2f0;
+	border: 1px solid #f0c7bf;
+	padding: 11px 14px;
+	border-radius: 5px;
+	color: #9a3725;
+	font-size: 13px;
+	white-space: pre-wrap;
+}
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+.form.panel {
+	padding: 24px;
+	margin: 23px 0;
+}
+.form label {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	font-size: 13px;
+	font-weight: 500;
+}
+.form label small {
+	color: var(--muted);
+	font-weight: 400;
+}
+.narrow {
+	max-width: 650px;
+	margin: auto;
+}
+.authpage {
+	max-width: 385px;
+	margin: 24px auto 0;
+}
+.authpage h1,
+.authpage > p {
+	text-align: center;
+}

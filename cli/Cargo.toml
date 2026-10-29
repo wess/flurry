@@ -1,0 +1,50 @@
+[package]
+name = "fsc"
+version = "0.1.1"
+edition = "2024"
+rust-version = "1.89"
+description = "Flurry Source Control"
+publish = false
+default-run = "fsc"
+
+[[bin]]
+name = "git-remote-flurry"
+path = "src/helper.rs"
+
+[dependencies]
+anyhow = "1"
+base64 = "0.22"
+cap-std = "3"
+cap-fs-ext = "3"
+clap = { version = "4", features = ["derive", "env"] }
+hex = "0.4"
+flate2 = "1"
+sha1 = "0.10"
+ignore = "0.4"
+rpassword = "7"
+rustix = {version = "1", features = ["fs"]}
+serde = { version = "1", features = ["derive", "rc"] }
+serde_json = "1"
+sha2 = "0.10"
+similar = "2"
+tempfile = "3"
+ureq = { version = "3.5", default-features = false, features = ["rustls", "json"] }
+unicode-normalization = "0.1"
+url = "2"
+uuid = { version = "1", features = ["v4", "serde"] }
+zeroize = "1"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+keyring = { version = "3", features = ["apple-native"] }
+[target.'cfg(target_os = "windows")'.dependencies]
+keyring = { version = "3", features = ["windows-native"] }
+[target.'cfg(target_os = "linux")'.dependencies]
+keyring = { version = "3", features = ["linux-native"] }
+
+
+[profile.release]
+opt-level = "s"
+lto = "thin"
+codegen-units = 1
+strip = true
+panic = "abort"

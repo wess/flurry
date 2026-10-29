@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://flurry.codes/</loc>
+  </url>
+  <url>
+    <loc>https://flurry.codes/terms</loc>
+  </url>
+  <url>
+    <loc>https://flurry.codes/privacy</loc>
+  </url>
+  <url><loc>https://flurry.codes/docs</loc></url>
+  <url><loc>https://flurry.codes/docs/getting-started</loc></url>
+  <url><loc>https://flurry.codes/docs/repositories</loc></url>
+  <url><loc>https://flurry.codes/docs/git</loc></url>
+  <url><loc>https://flurry.codes/docs/fsc</loc></url>
+  <url><loc>https://flurry.codes/docs/reviews</loc></url>
+  <url><loc>https://flurry.codes/docs/automation</loc></url>
+  <url><loc>https://flurry.codes/docs/mcp</loc></url>
+  <url><loc>https://flurry.codes/docs/api</loc></url>
+  <url><loc>https://flurry.codes/docs/security</loc></url>
+</urlset>

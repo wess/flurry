@@ -1,0 +1,234 @@
+.snippets {
+	max-width: 940px;
+	margin: 0 auto;
+}
+.snippetmast,
+.snippetheading {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 28px;
+	margin-bottom: 28px;
+}
+.snippetmast p,
+.snippetheading p {
+	color: var(--muted);
+	margin: 0;
+}
+.snippettools {
+	display: flex;
+	justify-content: space-between;
+	gap: 18px;
+	margin-bottom: 20px;
+}
+.snippetsearch,
+.snippetfilters,
+.snippetactions {
+	display: flex;
+	gap: 8px;
+}
+.snippetsearch {
+	flex: 1;
+	max-width: 460px;
+}
+.snippetsearch input {
+	flex: 1;
+}
+.snippetfilters .selected {
+	border-color: var(--blue);
+	color: var(--blue);
+	background: var(--soft);
+}
+.snippetlist {
+	overflow: hidden;
+}
+.snippetrow {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 13px;
+	padding: 16px;
+	color: var(--ink);
+	border-bottom: 1px solid var(--line);
+}
+.snippetrow:last-child {
+	border-bottom: 0;
+}
+.snippetrow:hover {
+	background: var(--soft);
+	text-decoration: none;
+}
+.snippetrow > svg {
+	color: var(--blue);
+}
+.snippetrow strong,
+.snippetrow small {
+	display: block;
+}
+.snippetrow small {
+	color: var(--muted);
+	margin-top: 3px;
+}
+.snippetrowmeta,
+.snippetvisibility,
+.snippetfork {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+.snippetrowmeta {
+	color: var(--muted);
+	font-size: 12px;
+	gap: 8px;
+}
+.snippetvisibility {
+	font-size: 12px;
+	text-transform: capitalize;
+}
+.backlink {
+	display: inline-block;
+	font-size: 12px;
+	margin-bottom: 20px;
+}
+.snippetheading {
+	margin-bottom: 18px;
+}
+.snippetheading h1 {
+	margin-bottom: 5px;
+}
+.snippetheading p {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 4px;
+}
+.snippetdescription {
+	max-width: 72ch;
+	margin-bottom: 22px;
+}
+.snippetfork {
+	font-size: 12px;
+	color: var(--muted);
+	margin: -9px 0 20px;
+}
+.snippetfile {
+	margin-bottom: 22px;
+	overflow: hidden;
+}
+.snippetfile .panelheading > div:first-child {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+.snippetfile .panelheading span {
+	color: var(--muted);
+	text-transform: lowercase;
+}
+.snippethistory {
+	margin-top: 34px;
+}
+.snippethistory h2 {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+}
+.snippethistory .panel {
+	overflow: hidden;
+}
+.snippethistory a {
+	display: grid;
+	grid-template-columns: 105px minmax(0, 1fr) auto;
+	gap: 14px;
+	padding: 12px 15px;
+	border-bottom: 1px solid var(--line);
+	color: var(--ink);
+	font-size: 12px;
+}
+.snippethistory a:last-child {
+	border-bottom: 0;
+}
+.snippethistory a:hover,
+.snippethistory a.selected {
+	background: var(--soft);
+	text-decoration: none;
+}
+.snippethistory small {
+	color: var(--muted);
+}
+.snippeteditor {
+	max-width: 820px;
+}
+.snippetmeta {
+	margin: 18px 0 24px;
+}
+.snippeteditfiles {
+	display: grid;
+	gap: 16px;
+}
+.snippeteditfile {
+	overflow: hidden;
+}
+.snippeteditfile .panelheading input {
+	width: min(420px, 100%);
+	font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+	font-size: 12px;
+}
+.snippeteditfile textarea {
+	display: block;
+	width: 100%;
+	min-height: 260px;
+	padding: 14px 16px;
+	border: 0;
+	border-radius: 0;
+	font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+	font-size: 13px;
+	line-height: 1.6;
+	tab-size: 2;
+}
+.snippeteditfile textarea:focus {
+	outline-offset: -2px;
+}
+.snippetsubmit {
+	margin-top: 20px;
+}
+.snippets .danger summary {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+}
+@media (max-width: 700px) {
+	.snippetmast,
+	.snippetheading,
+	.snippettools {
+		align-items: stretch;
+		flex-direction: column;
+	}
+	.snippetmast .button,
+	.snippetactions {
+		align-self: flex-start;
+	}
+	.snippettools {
+		gap: 10px;
+	}
+	.snippetsearch {
+		max-width: none;
+	}
+	.snippetrow {
+		grid-template-columns: auto minmax(0, 1fr);
+	}
+	.snippetrowmeta {
+		grid-column: 2;
+	}
+	.snippethistory a {
+		grid-template-columns: 1fr;
+		gap: 3px;
+	}
+	.snippetfile .panelheading {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+	.snippeteditfile .panelheading {
+		align-items: center;
+		flex-direction: row;
+	}
+}

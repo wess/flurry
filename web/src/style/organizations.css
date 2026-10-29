@@ -1,0 +1,112 @@
+.pageheading,
+.sectionheading {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 18px;
+}
+.pageheading {
+	margin: 12px 0 28px;
+}
+.pageheading h1,
+.sectionheading h2 {
+	margin-bottom: 5px;
+}
+.orglayout {
+	display: grid;
+	grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+	gap: 42px;
+	align-items: start;
+}
+.orglist a {
+	color: var(--ink);
+}
+.orglist a:hover {
+	background: var(--soft);
+}
+.orgsection {
+	max-width: 850px;
+	margin: 0 0 42px;
+}
+.sectionheading {
+	margin-bottom: 12px;
+}
+.teamblock {
+	border: 1px solid var(--line);
+	border-radius: 5px;
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+.teamheading {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 16px;
+	border: 0;
+	border-radius: 0;
+	text-align: left;
+}
+.teamheading:hover {
+	background: var(--soft);
+}
+.teamheading small {
+	display: block;
+	margin-top: 3px;
+	color: var(--muted);
+}
+.teamdetail {
+	padding: 8px 16px 20px;
+	border-top: 1px solid var(--line);
+}
+.teamdetail h3 {
+	margin: 20px 0 8px;
+	font-size: 14px;
+}
+.settingrow.compact {
+	padding-inline: 0;
+}
+.inlineform {
+	margin-top: 14px;
+}
+.inlineform > summary,
+.agentactions > summary {
+	cursor: pointer;
+	color: var(--blue);
+	font-size: 13px;
+	font-weight: 600;
+}
+.inlineform > .form,
+.agentactions > form {
+	margin-top: 14px;
+	padding: 16px;
+	border: 1px solid var(--line);
+	border-radius: 5px;
+}
+.agentactions {
+	position: relative;
+	min-width: 90px;
+}
+.agentactions > form {
+	display: grid;
+	gap: 12px;
+	min-width: 280px;
+}
+.dangerbutton {
+	color: #a33c31;
+	border-color: #e5b5af;
+}
+@media (max-width: 760px) {
+	.orglayout {
+		grid-template-columns: 1fr;
+		gap: 28px;
+	}
+	.agentrow {
+		align-items: flex-start;
+	}
+	.agentactions,
+	.agentactions > form {
+		width: 100%;
+		min-width: 0;
+	}
+}

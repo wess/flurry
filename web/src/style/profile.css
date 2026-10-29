@@ -1,0 +1,82 @@
+.profile {
+	display: grid;
+	grid-template-columns: 235px 1fr;
+	gap: 46px;
+}
+.profileaside h1 {
+	font-size: 24px;
+	margin-bottom: 2px;
+	overflow-wrap: anywhere;
+}
+.handle {
+	font-size: 19px;
+	color: var(--muted);
+	margin-bottom: 18px;
+	font-weight: 300;
+}
+.bio {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+.profilemeta {
+	display: flex;
+	flex-direction: column;
+	gap: 9px;
+	margin-top: 23px;
+	font-size: 13px;
+	color: var(--muted);
+}
+.profilemeta span,
+.profilemeta a {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	overflow-wrap: anywhere;
+}
+.profilemeta svg {
+	flex-shrink: 0;
+}
+.sectionheading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 15px;
+}
+.sectionheading h2 {
+	margin: 0;
+}
+.count {
+	font-size: 12px;
+	background: #edf0f4;
+	padding: 1px 7px;
+	border-radius: 20px;
+	margin-left: 5px;
+}
+.activityheading {
+	margin-top: 35px;
+}
+.activity {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.activity li {
+	display: flex;
+	gap: 14px;
+	padding: 15px 0;
+	border-top: 1px solid var(--line);
+}
+.activity small {
+	display: block;
+	color: var(--muted);
+	margin-top: 4px;
+}
+.activitydot {
+	height: 7px;
+	width: 7px;
+	border-radius: 50%;
+	background: #9aaabe;
+	margin-top: 7px;
+	flex-shrink: 0;
+}

@@ -1,0 +1,24 @@
+# Flurry
+
+> Flurry is an independent, self-hosted source-control service with a native version-control engine, immutable changesets, content-addressed file storage, server-side review, and Git compatibility.
+
+Flurry keeps Git at the interoperability boundary instead of using Git as its internal source of truth. Native changesets record changed paths and parent links. Compressed file objects use SHA-256 identities, while directory manifests and Git views are derived from native history. Main advances through reviewed, policy-checked operations.
+
+Flurry stores immutable changed-path records and content-addressed file objects as its source-control authority. It supports self-hosting, team workflows, offline native commits, and Git-compatible import and export.
+
+Automation can attach bounded provenance to a submitted revision and publish immutable evaluation attempts without changing source identity. Review pages expose rebuildable syntax summaries, and repository activity combines changes, reviews, decisions, statuses, and evaluations into one authorized timeline. Flurry does not execute repository code or send it to a model to provide these features.
+
+## Product
+
+- [Flurry](https://flurry.codes/): Product overview, engine architecture, repository workflow, and account creation.
+- [Documentation](https://flurry.codes/docs): Browser, Git, fsc, review, automation, MCP, API, and security guides.
+- [HTTP API](https://flurry.codes/docs/api): Authentication, request behavior, examples, and complete endpoint catalog.
+- [OpenAPI 3.1](https://flurry.codes/openapi.json): Machine-readable HTTP API description.
+
+## Policies
+
+- [Instance terms](https://flurry.codes/terms): Operator responsibility and default acceptable-use guidance.
+- [Instance privacy](https://flurry.codes/privacy): Data handled by the software and operator responsibility.
+
+## Referenced architecture
+

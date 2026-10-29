@@ -1,0 +1,312 @@
+.settingsheading {
+	margin-bottom: 25px;
+}
+.settingslayout {
+	display: grid;
+	grid-template-columns: 205px minmax(0, 1fr);
+	gap: 38px;
+}
+.settingsnav {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	align-self: start;
+}
+.settingsnav a {
+	padding: 8px 12px;
+	color: var(--muted);
+	border-radius: 4px;
+	font-size: 13px;
+}
+.settingsnav a.active {
+	background: var(--soft);
+	color: var(--blue);
+	font-weight: 600;
+}
+.settingscontent {
+	min-width: 0;
+	max-width: 750px;
+}
+.settingscontent .narrow {
+	max-width: none;
+}
+.settingscontent h1 {
+	font-size: 20px;
+}
+.settingsform {
+	max-width: 620px;
+	margin: 22px 0;
+}
+.settingsnote {
+	border: 1px solid var(--line);
+	padding: 16px;
+	border-radius: 5px;
+	margin: 24px 0;
+	font-size: 13px;
+	overflow-wrap: anywhere;
+}
+.settingsnote p:last-child {
+	margin-bottom: 0;
+}
+.settingsnote textarea {
+	width: 100%;
+	margin: 12px 0;
+	font-family: ui-monospace, monospace;
+	font-size: 12px;
+}
+.settingrow {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	padding: 13px 16px;
+	border-bottom: 1px solid var(--line);
+	font-size: 12px;
+}
+.settingrow:last-child {
+	border-bottom: 0;
+}
+.settingrow strong {
+	font-size: 13px;
+	font-weight: 500;
+}
+.settingrow small {
+	display: block;
+	color: var(--muted);
+	margin-top: 3px;
+}
+.settingrow > span:last-child {
+	margin-left: auto;
+	text-align: right;
+}
+.settingstitle {
+	margin-top: 30px;
+}
+.settingsbutton {
+	margin-top: 18px;
+}
+.padded {
+	padding: 15px;
+	margin: 0;
+}
+.settingssubnav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 0 0 24px;
+}
+.settingssubnav .selected {
+	background: var(--soft);
+	color: var(--blue);
+	border-color: var(--blue);
+}
+.repositorysettings {
+	max-width: 760px;
+}
+.danger {
+	border-color: #e5b5af;
+	margin: 24px 0;
+	padding: 15px;
+	font-size: 13px;
+}
+.danger summary {
+	color: #a33c31;
+	cursor: pointer;
+	font-weight: 500;
+}
+.danger > p {
+	margin-top: 14px;
+}
+.danger .settingsform {
+	margin-bottom: 0;
+}
+.userdetails {
+	margin: 12px 0;
+	padding: 14px 16px;
+}
+.userdetails summary {
+	cursor: pointer;
+	font-size: 13px;
+}
+.success {
+	color: #2f7951;
+	font-size: 13px;
+}
+.setupkey {
+	display: block;
+	overflow-wrap: anywhere;
+	font-size: 15px;
+	user-select: all;
+}
+.settingsdivider {
+	border: 0;
+	border-top: 1px solid var(--line);
+	margin: 36px 0;
+}
+.passkeylist {
+	overflow: hidden;
+	margin: 20px 0;
+}
+.passkeylist .settingrow {
+	flex-wrap: wrap;
+}
+.passkeymanage {
+	margin-left: auto;
+}
+.passkeymanage > summary {
+	list-style: none;
+}
+.passkeymanage > summary::-webkit-details-marker {
+	display: none;
+}
+.passkeymanage[open] {
+	flex-basis: 100%;
+	margin-left: 32px;
+}
+.passkeymanage .settingsform {
+	margin: 16px 0;
+}
+.dangerlabel {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	color: #a33c31;
+}
+.passkeysignin {
+	width: 100%;
+	margin: 6px 0 4px;
+}
+.authdivider {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	color: var(--muted);
+	font-size: 12px;
+	margin: 20px 0;
+}
+.authdivider::before,
+.authdivider::after {
+	content: "";
+	height: 1px;
+	background: var(--line);
+	flex: 1;
+}
+.wrapcode .codeviewer {
+	overflow-x: hidden;
+}
+.wrapcode .codeline code {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	min-width: 0;
+	flex: 1;
+}
+:root {
+	--background: #fff;
+}
+body {
+	background: var(--background);
+}
+:root[data-theme="dark"] {
+	color: #d7e0ec;
+	background: #17202b;
+	--ink: #d7e0ec;
+	--muted: #9aaac0;
+	--line: #354253;
+	--soft: #202d3c;
+	--blue: #82b8ee;
+	--background: #17202b;
+}
+[data-theme="dark"] body {
+	color: var(--ink);
+}
+[data-theme="dark"] button,
+[data-theme="dark"] .button,
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select,
+[data-theme="dark"] dialog {
+	background: var(--background);
+	color: var(--ink);
+	border-color: var(--line);
+}
+[data-theme="dark"] .primary {
+	background: #29659f;
+	color: white;
+}
+[data-theme="dark"] .header nav a,
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3 {
+	color: var(--ink);
+}
+[data-theme="dark"] .diffline.ins {
+	background: #183a2b;
+	color: #a5ddba;
+}
+[data-theme="dark"] .diffline.del {
+	background: #44262b;
+	color: #f0b9b4;
+}
+[data-theme="dark"] .findingseverity.blocker,
+[data-theme="dark"] .findingseverity.high {
+	color: #f0b9b4;
+	background: #44262b;
+	border-color: #704149;
+}
+[data-theme="dark"] .findingseverity.medium,
+[data-theme="dark"] .filefindings {
+	color: #e6cf8b;
+	background: #3a321d;
+	border-color: #665833;
+}
+[data-theme="dark"] .findingseverity.low,
+[data-theme="dark"] .findingseverity.info {
+	color: #b4d5f3;
+	background: #203449;
+	border-color: #365b7e;
+}
+[data-theme="dark"] .filefindings a {
+	color: #e6cf8b;
+}
+[data-theme="dark"] .filefindings a + a {
+	border-color: #665833;
+}
+[data-theme="dark"] .fileentry:hover,
+[data-theme="dark"] .reviewrow:hover {
+	background: var(--soft);
+}
+@media (max-width: 700px) {
+	.settingslayout {
+		grid-template-columns: 1fr;
+		gap: 25px;
+	}
+	.settingsnav {
+		flex-direction: row;
+		flex-wrap: wrap;
+		border-bottom: 1px solid var(--line);
+		padding-bottom: 12px;
+	}
+	.settingsnav a {
+		padding: 5px 8px;
+		font-size: 12px;
+	}
+	.settingrow {
+		flex-wrap: wrap;
+	}
+	.headeractions > [aria-label="New repository"] {
+		display: none;
+	}
+}
+.settingsgroup {
+	border: 1px solid var(--line);
+	border-radius: 5px;
+	padding: 18px;
+	display: grid;
+	gap: 16px;
+}
+.settingsgroup legend {
+	font-weight: 600;
+	padding: 0 6px;
+}
+.settingsgroup p {
+	margin: 0;
+}

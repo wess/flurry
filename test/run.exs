@@ -1,0 +1,6 @@
+unless Mix.env() == :test, do: raise("Run tests with MIX_ENV=test mix test")
+ExUnit.start(autorun: false)
+Ecto.Adapters.SQL.Sandbox.mode(Flurry.Repo, :manual)
+Path.wildcard("test/flurry/*.exs") |> Enum.each(&Code.require_file/1)
+result = ExUnit.run()
+if result.failures > 0, do: System.halt(1)

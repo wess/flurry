@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		"target": "ESNext",
+		"module": "Preserve",
+		"jsx": "react-jsx",
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"noEmit": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"noUncheckedIndexedAccess": true
+	},
+	"include": [
+		"src",
+		"build.ts",
+		"tests",
+		"playwright.config.ts",
+		"../scripts/*.ts"
+	]
+}

@@ -1,0 +1,95 @@
+.sourcepanel {
+	border: 1px solid var(--line);
+	border-radius: 5px;
+	padding: 14px 16px;
+	margin: 18px 0 6px;
+	font-size: 12px;
+}
+.sourcetitle {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+.sourcetitle > a {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+.sourcepanel p {
+	margin: 10px 0;
+}
+.sourcepanel > .row {
+	margin-top: 12px;
+}
+.sourceurl {
+	overflow-wrap: anywhere;
+}
+.transferdialog {
+	max-width: 550px;
+}
+.credentials {
+	margin: 0;
+	padding: 15px;
+	border: 1px solid var(--line);
+	border-radius: 5px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+.credentials legend,
+.credentials summary {
+	font-size: 12px;
+	color: var(--muted);
+	padding: 0 6px;
+}
+.credentials summary,
+.sourceother summary {
+	cursor: pointer;
+}
+.sourceconnections {
+	display: grid;
+	gap: 12px;
+	margin: 18px 0;
+}
+.sourceconnections label {
+	display: grid;
+	gap: 6px;
+	font-size: 12px;
+}
+.connectedaccounts {
+	display: grid;
+	gap: 8px;
+	font-size: 12px;
+}
+.connectedaccounts .row {
+	justify-content: space-between;
+}
+.sourcerepositories {
+	max-height: 280px;
+	overflow: auto;
+}
+.sourcerepositories button {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	padding: 11px 13px;
+	border: 0;
+	border-bottom: 1px solid var(--line);
+	border-radius: 0;
+	background: transparent;
+	text-align: left;
+}
+.sourcerepositories button:last-child {
+	border-bottom: 0;
+}
+.sourcerepositories span {
+	color: var(--muted);
+}
+.sourceother {
+	margin-top: 18px;
+	padding: 14px 16px;
+}
+.sourceother .form {
+	margin-top: 16px;
+}

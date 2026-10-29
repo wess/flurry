@@ -1,0 +1,89 @@
+.syntax {
+	color: var(--ink);
+}
+.hljs-comment,
+.hljs-quote {
+	color: #77869a;
+	font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-type {
+	color: #7552a3;
+}
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-attribute {
+	color: #28734c;
+}
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-variable,
+.hljs-template-variable {
+	color: #9a5b1f;
+}
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.function_,
+.hljs-section {
+	color: #2467a7;
+	font-weight: 600;
+}
+.hljs-built_in,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+	color: #8c4866;
+}
+.hljs-meta,
+.hljs-doctag {
+	color: #586f8d;
+}
+.hljs-deletion {
+	color: #a33c31;
+}
+[data-theme="dark"] .hljs-comment,
+[data-theme="dark"] .hljs-quote {
+	color: #8fa0b8;
+}
+[data-theme="dark"] .hljs-keyword,
+[data-theme="dark"] .hljs-selector-tag,
+[data-theme="dark"] .hljs-literal,
+[data-theme="dark"] .hljs-type {
+	color: #c6a7e8;
+}
+[data-theme="dark"] .hljs-string,
+[data-theme="dark"] .hljs-regexp,
+[data-theme="dark"] .hljs-addition,
+[data-theme="dark"] .hljs-attribute {
+	color: #8fd3aa;
+}
+[data-theme="dark"] .hljs-number,
+[data-theme="dark"] .hljs-symbol,
+[data-theme="dark"] .hljs-bullet,
+[data-theme="dark"] .hljs-variable,
+[data-theme="dark"] .hljs-template-variable {
+	color: #e4b47c;
+}
+[data-theme="dark"] .hljs-title,
+[data-theme="dark"] .hljs-title.class_,
+[data-theme="dark"] .hljs-title.function_,
+[data-theme="dark"] .hljs-section {
+	color: #8ec5f7;
+}
+[data-theme="dark"] .hljs-built_in,
+[data-theme="dark"] .hljs-name,
+[data-theme="dark"] .hljs-selector-id,
+[data-theme="dark"] .hljs-selector-class {
+	color: #e6a4bf;
+}
+[data-theme="dark"] .hljs-meta,
+[data-theme="dark"] .hljs-doctag {
+	color: #a8bdd8;
+}
+[data-theme="dark"] .hljs-deletion {
+	color: #f0a9a3;
+}
