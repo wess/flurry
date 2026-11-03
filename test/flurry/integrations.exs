@@ -27,6 +27,12 @@ defmodule Flurry.IntegrationsTest do
     assert Endpoint.validate!("https://hooks.example.test/events", public) ==
              "https://hooks.example.test/events"
 
+    assert Endpoint.pin!("https://hooks.example.test:8443/events", public) == %{
+             url: "https://93.184.216.34:8443/events",
+             hostname: "hooks.example.test",
+             host: "hooks.example.test:8443"
+           }
+
     for {url, resolver} <- [
           {"http://hooks.example.test", public},
           {"https://user:secret@hooks.example.test", public},

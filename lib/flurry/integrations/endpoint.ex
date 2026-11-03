@@ -3,6 +3,23 @@ defmodule Flurry.Integrations.Endpoint do
   alias Flurry.Error
 
   def validate!(url, resolver \\ &resolve/1) do
+    {uri, _addresses} = validated!(url, resolver)
+    URI.to_string(uri)
+  end
+
+  def pin!(url, resolver \\ &resolve/1) do
+    {uri, [address | _]} = validated!(url, resolver)
+    hostname = uri.host
+    host = if uri.port in [nil, 443], do: hostname, else: "#{hostname}:#{uri.port}"
+
+    %{
+      url: URI.to_string(%{uri | host: address |> :inet.ntoa() |> to_string()}),
+      hostname: hostname,
+      host: host
+    }
+  end
+
+  defp validated!(url, resolver) do
     uri = if is_binary(url), do: URI.parse(url), else: %URI{}
     host = if is_binary(uri.host), do: String.downcase(uri.host), else: nil
 
@@ -20,7 +37,7 @@ defmodule Flurry.Integrations.Endpoint do
     if addresses == [] or Enum.any?(addresses, &(not public?(&1))),
       do: Error.fail("Webhook host must resolve only to public addresses")
 
-    URI.to_string(%{uri | host: host})
+    {%{uri | host: host}, addresses}
   end
 
   def public?({a, b, c, d}) do

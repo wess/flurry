@@ -259,13 +259,15 @@ defmodule Flurry.Engine.Webhooks do
   end
 
   defp request(url, headers, body) do
-    case Req.post(url,
-           headers: headers,
+    endpoint = Endpoint.pin!(url)
+
+    case Req.post(endpoint.url,
+           headers: [{"host", endpoint.host} | headers],
            body: body,
            redirect: false,
            retry: false,
            receive_timeout: 10_000,
-           connect_options: [timeout: 5_000]
+           connect_options: [timeout: 5_000, hostname: endpoint.hostname]
          ) do
       {:ok, response} -> {:ok, response.status, response.body}
       {:error, error} -> {:error, Exception.message(error)}

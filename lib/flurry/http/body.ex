@@ -20,15 +20,6 @@ defmodule Flurry.Http.Body do
         do: max(8_388_608, min(146_800_640, file_limit(conn) * 2)),
         else: 1_048_576
 
-    length =
-      if String.ends_with?(conn.request_path, "/pushes") and conn.assigns.user,
-        do:
-          (
-            file_limit(conn)
-            146_800_640
-          ),
-        else: length
-
     Plug.Parsers.call(
       conn,
       Plug.Parsers.init(

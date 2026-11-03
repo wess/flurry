@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-ARG ELIXIR_IMAGE=hexpm/elixir:1.18.4-erlang-27.3.4-debian-bookworm-20250428-slim
+ARG ELIXIR_IMAGE=hexpm/elixir:1.19.7-erlang-28.4.3-debian-bookworm-20261027-slim
 ARG BUN_IMAGE=oven/bun:1.4.4-slim
 ARG DEBIAN_IMAGE=debian:bookworm-slim
 

@@ -5,6 +5,7 @@
 		"module": "Preserve",
 		"jsx": "react-jsx",
 		"moduleResolution": "bundler",
+		"types": ["bun"],
 		"allowImportingTsExtensions": true,
 		"verbatimModuleSyntax": true,
 		"noEmit": true,
