@@ -8,6 +8,21 @@
 .repoheading a {
 	font-size: 19px;
 }
+/* atlas breadcrumbs are small nav text by default; keep the heading-sized trail mantine drew */
+.repoheading .atlas-breadcrumbs ol {
+	align-items: center;
+	gap: 0;
+	font-size: inherit;
+	line-height: 1;
+}
+.repoheading .atlas-breadcrumbs li + li::before {
+	margin-inline: var(--mantine-spacing-xs);
+	color: var(--mantine-color-gray-7);
+}
+.repoheading .atlas-breadcrumbs a {
+	font-weight: 400;
+	color: var(--mantine-color-anchor);
+}
 .repodescription {
 	margin-top: 12px;
 	color: var(--muted);

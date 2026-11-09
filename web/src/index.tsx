@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { AtlasProvider } from "@wess/atlas-ui/provider/index.tsx";
+import { MantineProvider } from "@mantine/core";
+import { AtlasProvider } from "@wess/atlas/ui/provider";
+// atlas before mantine so mantine's body rules keep winning, as they did when atlas wrapped it
+import "@wess/atlas/ui/styles.css";
 import "@mantine/core/styles.css";
 import "./style/index.css";
 import { request, send, useAction } from "./api";
@@ -276,14 +279,17 @@ function App() {
 
 createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
-		<AtlasProvider
+		<MantineProvider
 			theme={{
 				primaryColor: "blue",
 				fontFamily: "system-ui, sans-serif",
 				defaultRadius: "sm",
 			}}
 		>
-			<App />
-		</AtlasProvider>
+			{/* light like mantine's default; "system" would flip native controls to dark on its own */}
+			<AtlasProvider defaultMode="light">
+				<App />
+			</AtlasProvider>
+		</MantineProvider>
 	</React.StrictMode>,
 );

@@ -7,7 +7,8 @@
       "dependencies": {
         "@mantine/core": "9.7.4",
         "@mantine/hooks": "9.7.4",
-        "@wess/atlas-ui": "https://github.com/wess/atlas/releases/download/v0.4.9/wess-atlas-ui-0.4.9.tgz",
+        "@wess/atlas": "https://github.com/wess/atlas/releases/download/v0.5.1/wess-atlas-0.5.1.tgz",
+        "@wess/atlas-ui": "https://github.com/wess/atlas/releases/download/v0.5.1/wess-atlas-ui-0.5.1.tgz",
         "highlight.js": "^11.11.1",
         "lucide-react": "1.67.0",
         "react": "19.3.1",
@@ -87,7 +88,9 @@
 
     "@typescript/typescript-win32-x64": ["@typescript/typescript-win32-x64@7.0.2", "", { "os": "win32", "cpu": "x64" }, "sha512-0BQ3HkAHHlKLSp1qRvf3SUhGpGsDuhB/jgFw75guyqbxJqEaS0Cw/VFO8i2nHglJUzQCRtMMR/IBAKE3ETMC4g=="],
 
-    "@wess/atlas-ui": ["@wess/atlas-ui@https://github.com/wess/atlas/releases/download/v0.4.9/wess-atlas-ui-0.4.9.tgz", { "peerDependencies": { "@mantine/core": "^9.7.3", "@mantine/form": "^9.7.3", "@mantine/hooks": "^9.7.3", "@tanstack/react-table": "^9.3.1", "lucide-react": "^1.61.0", "react": "^19.3.1", "react-dom": "^19.3.1", "zod": "^4.6.7" }, "optionalPeers": ["@mantine/core", "@mantine/form", "@mantine/hooks", "@tanstack/react-table", "lucide-react", "react", "react-dom", "zod"] }, "sha512-wlizwuarz0zFxMQe1kkahj5PpP9RZLSkCUGYiFVOXHMG/l6Yu2y/gen/9u8Qi6MX0EV6PCa0/TZ+Br8952XHeg=="],
+    "@wess/atlas": ["@wess/atlas@https://github.com/wess/atlas/releases/download/v0.5.1/wess-atlas-0.5.1.tgz", { "peerDependencies": { "@wess/atlas-admin": "0.5.1", "@wess/atlas-ai": "0.5.1", "@wess/atlas-auth": "0.5.1", "@wess/atlas-billing": "0.5.1", "@wess/atlas-cache": "0.5.1", "@wess/atlas-cli": "0.5.1", "@wess/atlas-config": "0.5.1", "@wess/atlas-db": "0.5.1", "@wess/atlas-edge": "0.5.1", "@wess/atlas-email": "0.5.1", "@wess/atlas-mcp": "0.5.1", "@wess/atlas-migrate": "0.5.1", "@wess/atlas-notify": "0.5.1", "@wess/atlas-oauth": "0.5.1", "@wess/atlas-request": "0.5.1", "@wess/atlas-security": "0.5.1", "@wess/atlas-server": "0.5.1", "@wess/atlas-share": "0.5.1", "@wess/atlas-social": "0.5.1", "@wess/atlas-sso": "0.5.1", "@wess/atlas-storage": "0.5.1", "@wess/atlas-ui": "0.5.1" }, "optionalPeers": ["@wess/atlas-admin", "@wess/atlas-ai", "@wess/atlas-auth", "@wess/atlas-billing", "@wess/atlas-cache", "@wess/atlas-cli", "@wess/atlas-config", "@wess/atlas-db", "@wess/atlas-edge", "@wess/atlas-email", "@wess/atlas-mcp", "@wess/atlas-migrate", "@wess/atlas-notify", "@wess/atlas-oauth", "@wess/atlas-request", "@wess/atlas-security", "@wess/atlas-server", "@wess/atlas-share", "@wess/atlas-social", "@wess/atlas-sso", "@wess/atlas-storage", "@wess/atlas-ui"] }, "sha512-IOY1kJGL+yyqpO3vW2q0HWTse3zeS9Q+7KtVPKCUK+IC+GLVPsc1Bh+7djfvII4HqOVWgq5r+GOMZJTtsaU25w=="],
+
+    "@wess/atlas-ui": ["@wess/atlas-ui@https://github.com/wess/atlas/releases/download/v0.5.1/wess-atlas-ui-0.5.1.tgz", { "peerDependencies": { "@tanstack/react-table": "^9.3.1", "lucide-react": "^1.67.0", "react": "^19.3.1", "react-dom": "^19.3.1", "zod": "^4.6.7" }, "optionalPeers": ["@tanstack/react-table", "lucide-react", "react", "react-dom", "zod"] }, "sha512-FC680tFzskLEeuZ4m1KbyEa9ACpsK0ylmeGOjnSTxfIUmc5RyxBnS0g9353hafw9p4ZMmS6iuXMN2vpoGNN8BQ=="],
 
     "bun-types": ["bun-types@1.4.4", "", { "dependencies": { "@types/node": "*", "undici-types": "*" } }, "sha512-yjrJh5oGX7mMPKGd19YXyIjmEuj4G4zNC30bs7PM9Az7NQ3ndF3j6hbeRdvJTRQEhJ/FYQwW0a2moweEi2hMxQ=="],
 

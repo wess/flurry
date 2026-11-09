@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Breadcrumb } from "@wess/atlas-ui/nav/index.tsx";
+import { Breadcrumb } from "@wess/atlas/ui/nav";
 import {
 	FileCode2,
 	Folder,
