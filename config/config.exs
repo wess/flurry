@@ -24,3 +24,7 @@ if config_env() == :test do
   config :flurry, store: Path.expand("../data/testobjects", __DIR__)
   config :logger, level: :warning
 end
+
+# the default level logs every SQL statement with its parameters, which puts
+# emails, password hashes, and token digests in the service log
+if config_env() == :prod, do: config(:logger, level: :info)
