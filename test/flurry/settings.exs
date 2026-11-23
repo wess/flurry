@@ -356,6 +356,174 @@ defmodule Flurry.SettingsTest do
     end
   end
 
+  test "administrators confirm account changes with their own password, never the account's",
+       %{user: user, token: token} do
+    user |> Ecto.Changeset.change(admin: true) |> Repo.update!()
+    id = String.replace(Ecto.UUID.generate(), "-", "")
+    secret = "known only to the managed account"
+
+    {target, _} =
+      Auth.signup(%{
+        "name" => "Managed user",
+        "username" => "m" <> id,
+        "email" => id <> "@example.test",
+        "password" => secret
+      })
+
+    path = "/api/admin/users/#{target.id}"
+    change = %{"admin" => true, "disabled" => false}
+
+    denied(401, fn -> api(:patch, path, token, Map.put(change, "password", secret)) end)
+    denied(401, fn -> api(:patch, path, token, change) end)
+    refute Repo.get!(Flurry.Schema.User, target.id).admin
+
+    assert api(:patch, path, token, Map.put(change, "password", @password)).status == 200
+    assert Repo.get!(Flurry.Schema.User, target.id).admin
+  end
+
+  test "administrators search and page accounts and read details without credentials", %{
+    user: user,
+    token: token
+  } do
+    denied(403, fn -> api(:get, "/api/admin/users", token) end)
+    denied(403, fn -> api(:get, "/api/admin/users/#{user.id}", token) end)
+    user |> Ecto.Changeset.change(admin: true) |> Repo.update!()
+    mark = "z" <> String.slice(String.replace(Ecto.UUID.generate(), "-", ""), 0, 12)
+
+    targets =
+      for index <- 1..3 do
+        {target, _} =
+          Auth.signup(%{
+            "name" => "Listed #{index}",
+            "username" => "#{mark}n#{index}",
+            "email" => "#{mark}_#{index}@example.test",
+            "password" => @password
+          })
+
+        target
+      end
+
+    list = fn query ->
+      api(:get, "/api/admin/users" <> query, token).resp_body |> Jason.decode!()
+    end
+
+    found = list.("?q=" <> String.upcase(mark))
+    assert found["total"] == 3
+    assert Enum.map(found["users"], & &1["username"]) == Enum.map(targets, & &1.username)
+
+    assert Enum.all?(
+             found["users"],
+             &(Map.keys(&1) -- ~w(id name username admin disabled owner founder) == [])
+           )
+
+    assert list.("?q=#{mark}_2@example")["total"] == 1
+    # an underscore is text to find, never a single-character wildcard
+    assert list.("?q=#{mark}_n")["total"] == 0
+    assert list.("?q=#{mark}&offset=2")["users"] |> length() == 1
+    assert list.("")["total"] == Repo.aggregate(Flurry.Schema.User, :count)
+    assert list.("")["limit"] == 50
+    denied(422, fn -> api(:get, "/api/admin/users?offset=-1", token) end)
+
+    target = hd(targets)
+    response = api(:get, "/api/admin/users/#{target.id}", token)
+    detail = Jason.decode!(response.resp_body)["user"]
+    assert detail["email"] == target.email
+    assert detail["email_verified"] == false
+    assert detail["two_factor"] == false
+    assert detail["sessions"] == 1
+    assert detail["tokens"] == 0
+    assert detail["repositories"] == 0
+    assert detail["owner"] == false
+
+    for secret <- ~w(password totp_secret totp_pending recovery_codes preferences),
+        do: refute(Map.has_key?(detail, secret))
+
+    refute response.resp_body =~ Repo.get!(Flurry.Schema.User, target.id).password
+    denied(404, fn -> api(:get, "/api/admin/users/#{Ecto.UUID.generate()}", token) end)
+    denied(404, fn -> api(:get, "/api/admin/users/unknown", token) end)
+  end
+
+  test "owners add and remove other owners; the founding owner and self are protected", %{
+    user: founder
+  } do
+    Repo.update_all(Flurry.Schema.Instance, set: [owner_id: founder.id])
+    {admin, _} = new_user()
+    admin = admin |> Ecto.Changeset.change(admin: true) |> Repo.update!()
+    {member, _} = new_user()
+    keep = %{"admin" => false, "disabled" => false}
+    fresh = fn user -> Repo.get!(Flurry.Schema.User, user.id) end
+
+    refute Instance.owner?(member)
+    # administrators manage access, but only an owner hands out ownership
+    assert_raise Flurry.Error, ~r/owner access required/, fn ->
+      Instance.update_user(admin, member.id, Map.put(keep, "owner", true))
+    end
+
+    granted = Instance.update_user(founder, member.id, Map.put(keep, "owner", true))
+    assert granted.owner and granted.admin and not granted.founder
+    member = fresh.(member)
+    assert Instance.owner?(member)
+    Instance.owner!(member)
+
+    # an owner stays an administrator and cannot be disabled until ownership is removed
+    assert Instance.update_user(admin, member.id, keep).admin
+
+    assert_raise Flurry.Error, ~r/Remove owner access/, fn ->
+      Instance.update_user(admin, member.id, %{"admin" => true, "disabled" => true})
+    end
+
+    assert_raise Flurry.Error, ~r/owner access required/, fn ->
+      Instance.update_user(admin, member.id, Map.put(keep, "owner", false))
+    end
+
+    assert_raise Flurry.Error, ~r/Another owner/, fn ->
+      Instance.update_user(member, member.id, Map.put(keep, "owner", false))
+    end
+
+    for change <- [%{"owner" => false}, %{"admin" => false}, %{"disabled" => true}] do
+      assert_raise Flurry.Error, ~r/founding owner/, fn ->
+        Instance.update_user(
+          member,
+          founder.id,
+          Map.merge(%{"admin" => true, "disabled" => false}, change)
+        )
+      end
+    end
+
+    # owners are peers: the new owner can promote, and the founder can take it back
+    assert Instance.update_user(member, admin.id, %{
+             "admin" => true,
+             "disabled" => false,
+             "owner" => true
+           }).owner
+
+    revoked =
+      Instance.update_user(founder, member.id, %{
+        "admin" => false,
+        "disabled" => true,
+        "owner" => false
+      })
+
+    refute revoked.owner or revoked.admin
+    assert revoked.disabled
+    refute Instance.owner?(fresh.(member))
+    assert_raise Flurry.Error, fn -> Instance.owner!(fresh.(member)) end
+
+    agent =
+      Agents.create(founder, %{
+        "name" => "Release worker",
+        "username" => "release." <> String.slice(Ecto.UUID.generate(), 0, 8),
+        "days" => 30,
+        "password" => @password
+      })
+
+    account = Repo.get_by!(Flurry.Schema.User, username: agent.username)
+
+    assert_raise Flurry.Error, ~r/Agent accounts/, fn ->
+      Instance.update_user(founder, account.id, Map.put(keep, "owner", true))
+    end
+  end
+
   test "settings endpoints are usable through browser sessions and source unlink uses its specific route",
        %{user: user, token: token} do
     assert api(:get, "/api/settings/account", token).status == 200

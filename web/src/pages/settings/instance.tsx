@@ -1,11 +1,22 @@
-import { useState } from "react";
+import { Users } from "./users";
 import { send, useResource } from "../../api";
 import { Alert } from "../../components/common";
-import { ConfirmIdentity, SettingsForm, Events } from "../../components/settings";
+import { ConfirmAdmin, SettingsForm, Events } from "../../components/settings";
+import { go } from "../../navigation";
 import type { User, AuditEvent, InstanceSettings } from "../../types";
 
-export function Administration({ user }: { user: User }) {
-	const [tab, setTab] = useState("instance");
+export function Administration({
+	user,
+	tab = "instance",
+	selected,
+	query,
+}: {
+	user: User;
+	tab?: string;
+	selected?: string;
+	query?: URLSearchParams;
+}) {
+	const setTab = (next: string) => go(next === "instance" ? "/admin" : `/admin/${next}`);
 	const resource = useResource<InstanceSettings>(user.admin || user.owner ? "/admin" : null);
 	if (!user.admin && !user.owner) return <Alert>Administrator access required.</Alert>;
 	const settings = resource.value;
@@ -26,7 +37,7 @@ export function Administration({ user }: { user: User }) {
 			</div>
 			<Alert>{resource.error}</Alert>
 			{tab === "users" ? (
-				<Users user={user} />
+				<Users user={user} selected={selected} query={query} />
 			) : tab === "audit" ? (
 				<Audit />
 			) : (
@@ -141,7 +152,7 @@ export function Administration({ user }: { user: User }) {
 									/>
 								</label>
 							</fieldset>
-							<ConfirmIdentity user={user} />
+							<ConfirmAdmin user={user} />
 						</SettingsForm>
 						<h3 className="settingstitle">Service status</h3>
 						<div className="panel">
@@ -172,68 +183,6 @@ export function Administration({ user }: { user: User }) {
 					</>
 				)
 			)}
-		</>
-	);
-}
-
-function Users({ user }: { user: User }) {
-	const resource = useResource<{
-		users: {
-			id: string;
-			username: string;
-			name: string;
-			admin: boolean;
-			owner: boolean;
-			disabled: boolean;
-		}[];
-	}>("/admin/users");
-	return (
-		<>
-			<p className="muted">
-				The first account owns the instance and cannot be demoted or disabled. Additional
-				administrators can manage access and instance policy.
-			</p>
-			<Alert>{resource.error}</Alert>
-			{resource.value?.users.map((target) => (
-				<details className="panel userdetails" key={target.id}>
-					<summary>
-						{target.name}{" "}
-						<span className="muted">
-							@{target.username}
-							{target.owner ? " · instance owner" : target.admin ? " · administrator" : ""}
-							{target.disabled ? " · disabled" : ""}
-						</span>
-					</summary>
-					<SettingsForm
-						label="Update account access"
-						onSave={async (values) => {
-							await send(`/admin/users/${target.id}`, values, "PATCH");
-							resource.reload();
-							window.dispatchEvent(new Event("flurry:settings"));
-						}}
-					>
-						<label className="check">
-							<input
-								name="admin"
-								type="checkbox"
-								defaultChecked={target.admin}
-								disabled={target.owner}
-							/>
-							Administrator
-						</label>
-						<label className="check">
-							<input
-								name="disabled"
-								type="checkbox"
-								defaultChecked={target.disabled}
-								disabled={target.owner || target.id === user.id}
-							/>
-							Disable sign-in and revoke this user’s sessions and tokens
-						</label>
-						<ConfirmIdentity user={user} />
-					</SettingsForm>
-				</details>
-			))}
 		</>
 	);
 }

@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 
-export const go = (path: string) => {
+export const go = (path: string, replace = false) => {
 	const url = new URL(path, window.location.href);
 	if (url.origin !== window.location.origin) {
 		window.location.assign(url);
 		return;
 	}
-	window.history.pushState(null, "", `${url.pathname}${url.search}${url.hash}`);
+	const target = `${url.pathname}${url.search}${url.hash}`;
+	if (replace) window.history.replaceState(null, "", target);
+	else window.history.pushState(null, "", target);
 	window.dispatchEvent(new PopStateEvent("popstate"));
 };
 const reserved = new Set([

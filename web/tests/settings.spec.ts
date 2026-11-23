@@ -2,6 +2,16 @@ import { test, expect } from "@playwright/test";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
+const sql = async (query: string) =>
+	(
+		await promisify(execFile)("psql", [
+			"postgresql://localhost/flurrye2e",
+			"-At",
+			"-c",
+			query,
+		])
+	).stdout.trim();
+
 test("account and repository settings persist, enforce privacy, and preserve removed history", async ({
 	page,
 	playwright,
@@ -139,7 +149,7 @@ test("administrator settings show service status and apply instance policy", asy
 	await page
 		.getByLabel("Instance name", { exact: true })
 		.fill("Flurry test instance");
-	await page.getByLabel("Current password", { exact: true }).fill(password);
+	await page.getByLabel("Your password", { exact: true }).fill(password);
 	await page.getByRole("button", { name: "Save changes", exact: true }).click();
 	await expect(page.locator(".brandname")).toHaveText("Flurry test instance");
 	await page.screenshot({
@@ -147,9 +157,169 @@ test("administrator settings show service status and apply instance policy", asy
 		fullPage: true,
 	});
 	await page.getByLabel("Instance name", { exact: true }).fill("Flurry");
-	await page.getByLabel("Current password", { exact: true }).fill(password);
+	await page.getByLabel("Your password", { exact: true }).fill(password);
 	await page.getByRole("button", { name: "Save changes", exact: true }).click();
 	await expect(page.locator(".brandname")).toHaveText("Flurry");
+});
+
+test("an administrator finds an account, reads its details, and promotes it with only their own password", async ({
+	page,
+	playwright,
+}) => {
+	const stamp = Date.now();
+	const username = `a${stamp}`;
+	const target = `m${stamp}`;
+	const password = "a long test password";
+	const other = await playwright.request.newContext({
+		baseURL: "http://127.0.0.1:4041",
+	});
+	await other.post("/api/signup", {
+		data: {
+			name: "Managed account",
+			username: target,
+			email: `${target}@example.test`,
+			password: "known only to the managed account",
+		},
+	});
+	await other.dispose();
+	await page.request.post("/api/signup", {
+		data: {
+			name: "Promoting administrator",
+			username,
+			email: `${username}@example.test`,
+			password,
+		},
+	});
+	await sql(`UPDATE users SET admin = true WHERE username = '${username}'`);
+	await page.goto("/admin");
+	await page.getByRole("button", { name: "Users", exact: true }).click();
+	await expect(page).toHaveURL(/\/admin\/users$/);
+
+	// the newest account is far past the first page; search finds it by email
+	await page.getByLabel("Find an account").fill(`${target}@example`);
+	await expect(page.locator(".usercount")).toHaveText("1–1 of 1 account");
+	await expect(page).toHaveURL(new RegExp(`/admin/users\\?q=${target}%40example$`));
+	const account = page.locator(".userentry").filter({ hasText: `@${target}` });
+	const details = page.getByRole("dialog", { name: "Managed account" });
+
+	await account
+		.getByRole("link", { name: `View details for @${target}` })
+		.click();
+	await expect(page).toHaveURL(/\/admin\/users\/[0-9a-f-]{36}\?q=/);
+	await expect(details.getByText(`${target}@example.test`)).toBeVisible();
+	await expect(details.getByText("not verified")).toBeVisible();
+	await expect(details.getByText("Member", { exact: true })).toBeVisible();
+	await expect(details).not.toContainText(/password|recovery|secret/i);
+	await details.screenshot({ path: "../artifacts/accountdetails.png" });
+
+	// the open account is part of the address: reload keeps it, back closes it
+	await page.reload();
+	await expect(details).toBeVisible();
+	await page.keyboard.press("Escape");
+	await expect(page.getByRole("dialog")).toHaveCount(0);
+	await expect(page.getByLabel("Find an account")).toHaveValue(
+		`${target}@example`,
+	);
+	await account
+		.getByRole("link", { name: `View details for @${target}` })
+		.click();
+	await expect(details).toBeVisible();
+	await page.goBack();
+	await expect(page.getByRole("dialog")).toHaveCount(0);
+
+	await account.locator("summary").click();
+	await expect(account.getByText(`Signed in as @${username}.`)).toBeVisible();
+	await expect(
+		account.getByLabel("Current password", { exact: true }),
+	).toHaveCount(0);
+	// ownership is only offered to owners
+	await expect(account.getByLabel("Owner", { exact: true })).toHaveCount(0);
+	await account.getByLabel("Administrator", { exact: true }).check();
+	await account.getByLabel("Your password", { exact: true }).fill(password);
+	await account.screenshot({ path: "../artifacts/administrationusers.png" });
+	await account
+		.getByRole("button", { name: "Update account access", exact: true })
+		.click();
+	await expect(account.locator("summary")).toContainText("administrator");
+});
+
+test("an owner adds and removes another owner with only their own password", async ({
+	page,
+	playwright,
+}) => {
+	const stamp = Date.now();
+	const username = `o${stamp}`;
+	const target = `c${stamp}`;
+	const password = "a long test password";
+	const other = await playwright.request.newContext({
+		baseURL: "http://127.0.0.1:4041",
+	});
+	await other.post("/api/signup", {
+		data: {
+			name: "Second owner",
+			username: target,
+			email: `${target}@example.test`,
+			password: "known only to the second owner",
+		},
+	});
+	await other.dispose();
+	await page.request.post("/api/signup", {
+		data: {
+			name: "Founding owner",
+			username,
+			email: `${username}@example.test`,
+			password,
+		},
+	});
+	const previous = await sql("SELECT owner_id FROM instance WHERE id = 1");
+	const flags = () =>
+		sql(`SELECT owner, admin, disabled FROM users WHERE username = '${target}'`);
+	try {
+		await sql(
+			`UPDATE instance SET owner_id = (SELECT id FROM users WHERE username = '${username}') WHERE id = 1`,
+		);
+		await page.goto(`/admin/users?q=${target}`);
+		const account = page.locator(".userentry").filter({ hasText: `@${target}` });
+		const save = account.getByRole("button", {
+			name: "Update account access",
+			exact: true,
+		});
+		await account.locator("summary").click();
+		await account.getByLabel("Owner", { exact: true }).check();
+		await account.getByLabel("Your password", { exact: true }).fill(password);
+		await save.click();
+		await expect(account.locator("summary")).toContainText("instance owner");
+		expect(await flags()).toBe("t|t|f");
+
+		// an owner is always an administrator and cannot be disabled while one
+		await expect(
+			account.getByLabel("Administrator", { exact: true }),
+		).toBeChecked();
+		await expect(
+			account.getByLabel("Administrator", { exact: true }),
+		).toBeDisabled();
+		await expect(account.getByLabel(/^Disable sign-in/)).toBeDisabled();
+		await account.screenshot({ path: "../artifacts/administrationowner.png" });
+
+		await account.getByLabel("Owner", { exact: true }).uncheck();
+		await account.getByLabel("Your password", { exact: true }).fill(password);
+		await save.click();
+		await expect(account.locator("summary")).not.toContainText("instance owner");
+		await expect(account.locator("summary")).toContainText("administrator");
+		expect(await flags()).toBe("f|t|f");
+
+		// nobody changes their own ownership, and the founder's is fixed
+		await page.goto(`/admin/users?q=${username}`);
+		const own = page.locator(".userentry").filter({ hasText: `@${username}` });
+		await expect(own.locator("summary")).toContainText("founding owner");
+		await own.locator("summary").click();
+		await expect(own.getByLabel("Owner", { exact: true })).toBeChecked();
+		await expect(own.getByLabel("Owner", { exact: true })).toBeDisabled();
+	} finally {
+		await sql(
+			`UPDATE instance SET owner_id = ${previous ? `'${previous}'` : "NULL"} WHERE id = 1`,
+		);
+	}
 });
 
 test("agent accounts and role-based teams can be managed in the browser", async ({

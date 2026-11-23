@@ -94,6 +94,21 @@ export function ConfirmIdentity({
 	);
 }
 
+// admin forms edit other accounts, so the confirmation is set apart and names
+// whose password it wants. it is always the signed-in administrator's own.
+export function ConfirmAdmin({ user }: { user: User }) {
+	return (
+		<fieldset className="settingsgroup">
+			<legend>Confirm it’s you</legend>
+			<p className="muted">
+				Signed in as @{user.username}. Enter your own password to authorize this
+				change. You never need the password of an account you manage.
+			</p>
+			<ConfirmIdentity user={user} label="Your password" />
+		</fieldset>
+	);
+}
+
 export function Events({
 	events,
 }: {

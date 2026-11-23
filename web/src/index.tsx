@@ -190,7 +190,7 @@ function App() {
 	else if (page === "docs") content = <Docs topic={id} />;
 	else if (page === "admin")
 		content = session.user ? (
-			<Administration user={session.user} />
+			<Administration user={session.user} tab={id} selected={section} query={query} />
 		) : (
 			<p>Sign in to administer this instance.</p>
 		);
@@ -268,7 +268,7 @@ function App() {
 				<a href={isSnippetHost() ? mainOrigin() + "/docs" : "/docs"}>Docs</a>
 				<a href={isSnippetHost() ? mainOrigin() + "/terms" : "/terms"}>Terms</a>
 				<a href={isSnippetHost() ? mainOrigin() + "/privacy" : "/privacy"}>Privacy</a>
-				<span>0.1.3</span>
+				<span>{FLURRY_VERSION}</span>
 			</footer>
 		</>
 	);

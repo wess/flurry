@@ -12,6 +12,7 @@ defmodule Flurry.Schema.User do
     field(:password, :string)
     field(:account_type, :string, default: "human")
     field(:admin, :boolean, default: false)
+    field(:owner, :boolean, default: false)
     field(:storage_migrated, :boolean, default: false)
     field(:disabled, :boolean, default: false)
     field(:private_profile, :boolean, default: false)

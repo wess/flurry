@@ -1,5 +1,6 @@
 import { copyFile, mkdir, writeFile } from "node:fs/promises";
 import { openapi } from "./openapi";
+import { version } from "./version";
 
 await mkdir("../priv/static/assets", { recursive: true });
 const result = await Bun.build({
@@ -8,7 +9,10 @@ const result = await Bun.build({
 	target: "browser",
 	minify: true,
 	naming: "[name].[ext]",
-	define: { "process.env.NODE_ENV": '"production"' },
+	define: {
+		"process.env.NODE_ENV": '"production"',
+		FLURRY_VERSION: JSON.stringify(version),
+	},
 });
 if (!result.success) {
 	console.error(result.logs);

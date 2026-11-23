@@ -25,7 +25,8 @@ defmodule Flurry.Release do
     {23, "agents", Flurry.Migrations.Agents},
     {24, "reviewfindings", Flurry.Migrations.Reviewfindings},
     {25, "snippets", Flurry.Migrations.Snippets},
-    {26, "passkeys", Flurry.Migrations.Passkeys}
+    {26, "passkeys", Flurry.Migrations.Passkeys},
+    {27, "owners", Flurry.Migrations.Owners}
   ]
 
   def migrate do

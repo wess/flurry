@@ -22,15 +22,25 @@ surface exposes only controls that the instance can enforce end to end.
 | Automated review | Manual, review-opened, or every-revision requests; specialist profiles; optional policy status |
 | Notifications | Durable inbox for review, issue, assignment, and transfer activity |
 | Instance | Name, registration, sign-in and public-repository policy, allowed Git hosts, storage limits |
-| Administration | Account access, additional administrators, audit log, service health, and usage counts |
+| Administration | Account search and details, account access, additional owners and administrators, audit log, service health, and usage counts |
 
 The first successful signup owns the instance. An advisory lock serializes
-initial registration. The owner identity persists separately from the
+initial registration. That founding owner persists separately from the
 administrator flag and cannot be disabled or demoted through administration.
-Other administrators can manage account access and instance policy.
+An owner can give owner access to other people and take it back, but never
+change their own. Owners are always administrators and cannot be disabled
+until owner access is removed. Other administrators can manage account access
+and instance policy, but cannot grant or remove ownership.
+
+Administrators find accounts by name, username, or email and can open an
+account's details: contact and verification state, role, sign-in security,
+and usage. Passwords, authenticator secrets, and recovery codes are never
+part of that view.
 
 Browser sessions are required for account, repository, and instance settings.
-Sensitive changes require the current password and a second factor when enabled.
+Sensitive changes require the signed-in user's own current password and a second
+factor when enabled. Administrators confirm with their own password; promoting,
+demoting, or disabling an account never involves that account's password.
 API tokens cannot administer these areas. Audit records exclude passwords,
 tokens, authenticator secrets, and recovery codes.
 

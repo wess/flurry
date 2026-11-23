@@ -4,7 +4,7 @@ defmodule Flurry.MixProject do
   def project do
     [
       app: :flurry,
-      version: "0.1.4",
+      version: "0.1.5",
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       deps: deps(),

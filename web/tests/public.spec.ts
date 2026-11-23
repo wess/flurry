@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { execFile } from "node:child_process";
+import { readFile } from "node:fs/promises";
 import { promisify } from "node:util";
 
 const sql = async (query: string) =>
@@ -91,7 +92,7 @@ test("instance owner configures storage safety limits", async ({ page }) => {
 		await page.getByLabel("Maximum file size (MiB)").fill("64");
 		await page.getByLabel("Per-project retained storage (GiB)").fill("8");
 		await page.getByLabel("Per-account retained storage (GiB)").fill("32");
-		await page.getByLabel("Current password").fill(password);
+		await page.getByLabel("Your password").fill(password);
 		await page.getByRole("button", { name: "Save changes" }).click();
 		await expect(page.getByRole("status")).toHaveText("Saved");
 		expect(await sql("SELECT file_bytes FROM instance WHERE id = 1")).toBe(String(64 * 1048576));
@@ -101,4 +102,18 @@ test("instance owner configures storage safety limits", async ({ page }) => {
 			`UPDATE instance SET owner_id = '${previous}', file_bytes = ${file}, project_storage_bytes = ${project}, account_storage_bytes = ${account} WHERE id = 1`,
 		);
 	}
+});
+
+test("the footer and API description carry the release version from mix.exs", async ({
+	page,
+	request,
+}) => {
+	const version = (await readFile("../mix.exs", "utf8")).match(
+		/version: "(\d+\.\d+\.\d+)"/,
+	)?.[1];
+	expect(version).toBeTruthy();
+	await page.goto("/login");
+	await expect(page.locator("footer span").last()).toHaveText(version!);
+	const spec = await (await request.get("/openapi.json")).json();
+	expect(spec.info.version).toBe(version);
 });

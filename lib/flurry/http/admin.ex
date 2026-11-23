@@ -16,7 +16,12 @@ defmodule Flurry.Http.Admin do
   end
 
   get "/users" do
-    json(conn, %{users: Instance.users(conn.assigns.user)})
+    conn = fetch_query_params(conn)
+    json(conn, Instance.users(conn.assigns.user, conn.query_params))
+  end
+
+  get "/users/:id" do
+    json(conn, %{user: Instance.user(conn.assigns.user, id)})
   end
 
   patch "/users/:id" do

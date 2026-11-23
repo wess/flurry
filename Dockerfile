@@ -9,6 +9,7 @@ FROM ${BUN_IMAGE} AS web
 WORKDIR /app/web
 COPY web/package.json web/bun.lock ./
 RUN bun install --frozen-lockfile
+COPY mix.exs /app/mix.exs
 COPY web ./
 RUN bun run typecheck && bun run build
 

@@ -219,8 +219,9 @@ const automation = [
 const administration = [
 	["GET", "/admin", "Read instance configuration"],
 	["PATCH", "/admin", "Update instance configuration"],
-	["GET", "/admin/users", "List instance users"],
-	["PATCH", "/admin/users/{id}", "Update a user’s instance access"],
+	["GET", "/admin/users", "Search and page instance users"],
+	["GET", "/admin/users/{id}", "Read one user’s account details"],
+	["PATCH", "/admin/users/{id}", "Update a user’s owner, administrator, or sign-in access"],
 	["GET", "/admin/audit", "Read the instance audit log"],
 	["GET", "/admin/overview", "Read operational health and storage overview"],
 ];

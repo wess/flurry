@@ -61,6 +61,8 @@ defmodule Mix.Tasks.Flurry.Setup do
         Ecto.Migrator.up(repo, 25, Flurry.Migrations.Snippets, log: :info)
         Code.require_file("priv/repo/migrations/passkeys.exs")
         Ecto.Migrator.up(repo, 26, Flurry.Migrations.Passkeys, log: :info)
+        Code.require_file("priv/repo/migrations/owners.exs")
+        Ecto.Migrator.up(repo, 27, Flurry.Migrations.Owners, log: :info)
       end)
   end
 end

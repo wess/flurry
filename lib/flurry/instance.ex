@@ -2,6 +2,8 @@ defmodule Flurry.Instance do
   import Ecto.Query
   alias Flurry.{Auth, Error, Repo, Audit, Schema.Instance, Schema.User}
 
+  @page 50
+
   def get, do: Repo.get!(Instance, 1)
 
   def public do
@@ -14,7 +16,14 @@ defmodule Flurry.Instance do
   def hosts, do: Application.get_env(:flurry, :git_hosts, get().git_hosts)
   def limits, do: Map.take(get(), [:file_bytes, :project_storage_bytes, :account_storage_bytes])
   def owner?(nil), do: false
-  def owner?(user), do: get().owner_id == user.id
+
+  # the first account is the founding owner through the instance record. others
+  # hold owner access through their own flag, which a disabled account cannot use
+  def owner?(user),
+    do: founder?(user) or (Map.get(user, :owner, false) and not Map.get(user, :disabled, false))
+
+  def founder?(nil), do: false
+  def founder?(user), do: get().owner_id == user.id
 
   def owner!(user),
     do: unless(owner?(user), do: Error.fail("Instance owner access required", 403))
@@ -123,21 +132,62 @@ defmodule Flurry.Instance do
     [file_bytes: file, project_storage_bytes: project, account_storage_bytes: account]
   end
 
-  def users(user) do
-    admin!(user)
+  def users(actor, params \\ %{}) do
+    admin!(actor)
+    scope = matching(params["q"])
+    offset = offset!(params["offset"])
+    founder = get().owner_id
 
-    Repo.all(from(u in User, order_by: u.inserted_at, limit: 200))
-    |> Enum.map(fn target ->
-      Map.take(target, [:id, :name, :username, :admin, :disabled])
-      |> Map.put(:owner, owner?(target))
-    end)
+    users =
+      Repo.all(from(u in scope, order_by: [u.inserted_at, u.id], limit: @page, offset: ^offset))
+      |> Enum.map(&summary(&1, founder))
+
+    %{users: users, total: Repo.aggregate(scope, :count), limit: @page}
+  end
+
+  # everything an administrator may know about an account. credentials and
+  # authenticator material are never selected into the result
+  def user(actor, id) do
+    admin!(actor)
+    unless match?({:ok, _}, Ecto.UUID.cast(id)), do: Error.fail("User not found", 404)
+    target = Repo.get(User, id) || Error.fail("User not found", 404)
+    usage = Flurry.Quota.usage(target)
+    key = Ecto.UUID.dump!(target.id)
+    now = DateTime.utc_now()
+
+    live = fn table ->
+      Repo.aggregate(from(r in table, where: r.user_id == ^key and r.expires_at > ^now), :count)
+    end
+
+    Map.take(target, [
+      :email,
+      :bio,
+      :location,
+      :website,
+      :account_type,
+      :private_profile,
+      :hide_activity
+    ])
+    |> Map.merge(summary(target, get().owner_id))
+    |> Map.merge(%{
+      joined_at: target.inserted_at,
+      email_verified: not is_nil(target.email_verified_at),
+      two_factor: not is_nil(target.totp_secret),
+      passkeys:
+        Repo.aggregate(from(p in Flurry.Schema.Passkey, where: p.user_id == ^target.id), :count),
+      sessions: live.("sessions"),
+      tokens: live.("tokens"),
+      repositories: usage.repositories,
+      storage_bytes: usage.bytes
+    })
   end
 
   def update_user(actor, id, attrs) do
     admin!(actor)
 
-    unless is_boolean(attrs["admin"]) and is_boolean(attrs["disabled"]),
-      do: Error.fail("Specify administrator and disabled flags")
+    unless is_boolean(attrs["admin"]) and is_boolean(attrs["disabled"]) and
+             (is_nil(attrs["owner"]) or is_boolean(attrs["owner"])),
+           do: Error.fail("Specify administrator and disabled flags")
 
     unless match?({:ok, _}, Ecto.UUID.cast(id)), do: Error.fail("User not found", 404)
 
@@ -145,12 +195,32 @@ defmodule Flurry.Instance do
       Repo.transaction(fn ->
         Repo.query!("SELECT pg_advisory_xact_lock(735202)")
         target = Repo.get!(User, id)
+        founder = founder?(target)
 
-        if owner?(target) and (not attrs["admin"] or attrs["disabled"]),
-          do: Error.fail("The instance owner cannot be demoted or disabled")
+        if founder and (not attrs["admin"] or attrs["disabled"] or attrs["owner"] == false),
+          do: Error.fail("The founding owner cannot be demoted or disabled")
+
+        # the founder owns the instance through its record, so the flag stays as it is
+        owner = if founder or is_nil(attrs["owner"]), do: target.owner, else: attrs["owner"]
+
+        if owner != target.owner do
+          owner!(actor)
+
+          if target.id == actor.id,
+            do: Error.fail("Another owner must change your owner access")
+
+          if owner and target.account_type != "human",
+            do: Error.fail("Agent accounts cannot own the instance")
+        end
+
+        if owner and attrs["disabled"],
+          do: Error.fail("Remove owner access before disabling this account")
 
         if target.id == actor.id and attrs["disabled"],
           do: Error.fail("You cannot disable your own account")
+
+        # owner access always includes administration
+        admin = attrs["admin"] or owner
 
         remaining =
           Repo.aggregate(
@@ -158,25 +228,64 @@ defmodule Flurry.Instance do
             :count
           )
 
-        if remaining == 0 and (not attrs["admin"] or attrs["disabled"]),
+        if remaining == 0 and (not admin or attrs["disabled"]),
           do: Error.fail("Keep at least one active administrator")
 
         result =
           target
-          |> Ecto.Changeset.change(admin: attrs["admin"], disabled: attrs["disabled"])
+          |> Ecto.Changeset.change(admin: admin, disabled: attrs["disabled"], owner: owner)
           |> Repo.update!()
 
         if result.disabled, do: Flurry.Security.Sessions.revoke_all(result)
+        flags = summary(result, get().owner_id)
 
         Audit.record(actor, "user.update", nil, %{
           username: target.username,
-          admin: result.admin,
-          disabled: result.disabled
+          admin: flags.admin,
+          owner: flags.owner,
+          disabled: flags.disabled
         })
 
-        result
+        flags
       end)
 
-    Map.take(result, [:id, :name, :username, :admin, :disabled])
+    result
   end
+
+  defp summary(target, founder) do
+    Map.take(target, [:id, :name, :username, :admin, :disabled])
+    |> Map.merge(%{
+      founder: target.id == founder,
+      owner: target.id == founder or (target.owner and not target.disabled)
+    })
+  end
+
+  defp matching(nil), do: User
+
+  defp matching(term) when is_binary(term) do
+    case String.trim(term) |> String.slice(0, 100) do
+      "" ->
+        User
+
+      text ->
+        like = "%" <> String.replace(text, ["\\", "%", "_"], &("\\" <> &1)) <> "%"
+
+        from(u in User,
+          where: ilike(u.username, ^like) or ilike(u.name, ^like) or ilike(u.email, ^like)
+        )
+    end
+  end
+
+  defp matching(_), do: Error.fail("Search text must be a string")
+
+  defp offset!(nil), do: 0
+
+  defp offset!(value) when is_binary(value) do
+    case Integer.parse(value) do
+      {offset, ""} when offset >= 0 -> offset
+      _ -> Error.fail("Offset must be a non-negative integer")
+    end
+  end
+
+  defp offset!(_), do: Error.fail("Offset must be a non-negative integer")
 end
